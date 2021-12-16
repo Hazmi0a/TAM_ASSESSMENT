@@ -1,0 +1,22 @@
+{
+  "name": "phonebook-cli",
+  "version": "1.0.0",
+  "description": "Phonebook app",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hazmi0a/TAM_ASSESSMENT.git"
+  },
+  "author": "Abdullah Alhazmi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hazmi0a/TAM_ASSESSMENT/issues"
+  },
+  "homepage": "https://github.com/Hazmi0a/TAM_ASSESSMENT#readme",
+  "dependencies": {
+    "mongodb": "^4.2.2"
+  }
+}

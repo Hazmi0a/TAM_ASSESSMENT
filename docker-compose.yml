@@ -1,0 +1,11 @@
+version: "3"
+services:
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sa
+      MONGO_INITDB_ROOT_PASSWORD: Password2021
+    ports:
+    - 27017:27017
