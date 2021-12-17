@@ -5,15 +5,18 @@ const { getReqData } = require("./utils");
 
 const server = http.createServer(async (req, res) => {
     //set the request headers: 
-    var headers = {
-        "Access-Control-Allow-Origin": req.headers.origin,
-        "Access-Control-Allow-Methods":  "POST, GET, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Credentials": false,
-        "Access-Control-Allow-Headers": "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept",
-        "Access-Control-Max-Age": "86400"
+   
+    if (req.headers.origin != undefined) {
+        res.setHeader("Access-Control-Allow-Origin", req.headers.origin)
+        var headers = {
+                "Access-Control-Allow-Origin": req.headers.origin,
+                "Access-Control-Allow-Methods":  "POST, GET, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Credentials": false,
+                "Access-Control-Allow-Headers": "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept",
+                "Access-Control-Max-Age": "86400"
 
-    };
-    res.setHeader("Access-Control-Allow-Origin", req.headers.origin)
+            };
+    }
     
     //set the request route
     // /api/contacts : GET

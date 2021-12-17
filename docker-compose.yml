@@ -9,3 +9,18 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: Password2021
     ports:
     - 27017:27017
+  web:
+    image: nginx
+    container_name: webapp
+    volumes:
+      - ./Frontend:/usr/share/nginx/html
+    restart: always
+    ports:
+    - "8080:80"
+  api:
+    build: 
+      context: ./Backend/
+      target: dev
+    command: node app.js
+    ports:
+      - "3000:3000"

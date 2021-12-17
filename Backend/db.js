@@ -2,7 +2,7 @@ var MongoClient = require('mongodb').MongoClient;
 var OID = require('mongodb').ObjectID;
 
 
-const uri = "mongodb://sa:Password2021@localhost:27017/?authSource=admin";
+const uri = "mongodb://sa:Password2021@mongodb:27017/?authSource=admin";
 const client = new MongoClient(uri);
 const database = client.db("Application");
 const dbo = database.collection("Phonebook");
