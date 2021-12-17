@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css" /> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Phone Book</title>
+</head>
+<body>
+  <header>
+    <nav class="nav collapsible">
+        <a class="nav__brand" href="/"><img src="images/logo.svg" alt="" /></a>
+        <svg class="icon icon--white nav__toggler">
+          <use xlink:href="images/sprite.svg#menu"></use>
+        </svg>
+        <ul class="list nav__list collapsible__content">
+          <li class="nav__item"><a href="#">Hosting</a></li>
+          <li class="nav__item"><a href="#">VPS</a></li>
+          <li class="nav__item"><a href="#">Domain</a></li>
+          <li class="nav__item"><a href="#">Pricing</a></li>
+        </ul>
+      </nav>
+  </header>
+
+
+  <div class="container">
+    <div class="title">Add New Contact</div>
+    <div class="content">
+      <form  method="post" id="newContact" onsubmit="addNewContact()" >
+        <div class="user-details" >
+          <div id="">
+
+          </div>
+          <div class="input-box">
+            <span class="details">Full Name</span>
+            <input id="name" type="text" placeholder="Enter your name" required>
+          </div>
+          <div class="input-box" id="phonenumber">
+            <span class="details">Phone Number</span>
+            <input id="phone" type="text" placeholder="Enter your number" required>
+          </div>
+          <div class="button">
+            <input type="button" value="+another Number" id="anotherOne" onclick="addAnotherField()">
+          </div>
+          <div class="button">
+            <input type="submit" value="Add" id="submit">
+          </div>
+       </form>
+    </div>
+    </div>
+  </div>
+  <div class="containerTable">
+    <div class="title">Contacts Table</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Phone Numbers</th>
+        </tr>
+      </thead>
+      <tbody id="data">
+        <!-- <tr>
+          <td><a href="#">61bbbafeff60374ef527a25e</a></td>
+          <td>abdullah</td>
+          <td>0506065978</td>
+        </tr>
+        <tr>
+          <td><a href="#">INV__1002</a></td>
+          <td>Sonic</td>
+          <td>1/4/2021</td>
+        </tr>
+        <tr>
+          <td><a href="#">INV__1003</a></td>
+          <td>Innercircle</td>
+          <td>1/2/2021</td>
+        </tr>
+        <tr>
+          <td><a href="#">INV__1004</a></td>
+          <td>Varsity Plus</td>
+          <td>12/30/2020</td>
+        </tr>
+        <tr>
+          <td><a href="#">INV__1005</a></td>
+          <td>Highlander</td>
+          <td>12/18/2020</td>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+
+ 
+  
+    
+
+      <script src="js/main.js">
+      </script>
+</body>
+</html>
