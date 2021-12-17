@@ -1,5 +1,5 @@
 const http = require("http");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 const Contact = require("./controller"); 
 const { getReqData } = require("./utils");
 
@@ -33,8 +33,9 @@ const server = http.createServer(async (req, res) => {
         try {
             // get id from url
             const name = req.url.split("/")[3];
+            const nameDecoded = decodeURI(name);
             // get contact name
-            const contact = await new Contact().getContactByName(name);
+            const contact = await new Contact().getContactByName(nameDecoded);
             // set the status code and content-type
             res.writeHead(200, { "Content-Type": "application/json" });
             // send the data
