@@ -78,7 +78,7 @@ const getAllContacts =   () => {
           data.forEach((itemData) => {
             console.log(itemData);
             temp += "<tr>";
-            temp += "<td>" + itemData._id + "</td>";
+            // temp += "<td>" + itemData._id + "</td>";
             temp += "<td>" + itemData.name + "</td>";
             temp += "<td>" + printPhoneNumbers(itemData.phoneNumbers)+"</td></tr>";
           });
