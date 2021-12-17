@@ -1,8 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://localhost:27017/";
+var OID = require('mongodb').ObjectID;
 
-// import { MongoClient } from "mongodb";
-// Replace the uri string with your MongoDB deployment's connection string.
+
 const uri = "mongodb://sa:Password2021@localhost:27017/?authSource=admin";
 const client = new MongoClient(uri);
 const database = client.db("Application");
@@ -10,7 +9,7 @@ const dbo = database.collection("Phonebook");
 
 const cont = { name: "abdullah", phoneNumbers: ["0506065978"]}
 
- const addNewContact = async (contact) => {
+ const addContact = async (contact) => {
     try {
          await client.connect();
          
@@ -35,13 +34,12 @@ const cont = { name: "abdullah", phoneNumbers: ["0506065978"]}
     }
 };
 
- const find = async (contactName) => {
+ const findByName = async (contactName) => {
     try {
         await client.connect();
         const query = {name: contactName}
         const options = {
-            // Include only the `title` and `imdb` fields in the returned document
-            projection: { _id: 0, name: 1, phoneNumbers: 1 },
+            projection: { _id: 1, name: 1, phoneNumbers: 1 },
           };
         const contact = await dbo.findOne(query, options);
         return contact;
@@ -52,15 +50,35 @@ const cont = { name: "abdullah", phoneNumbers: ["0506065978"]}
     }
 };
 
-// addNewContact(cont);
-const main = async () => {
-    await addNewContact(cont);
-    const arr = await listAll();
-    console.log(arr);
-    
-    const contact = await find("abdullah");
-    console.log(contact);
-}
-main();
+const findById = async (id) => {
+    try {
+        await client.connect();
+        const objId = new OID(id); 
+        const query = {_id: objId}
+        const options = {
+            projection: { _id: 1, name: 1, phoneNumbers: 1 },
+          };
+        const contact = await dbo.findOne(query, options);
+        return contact;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        await client.close();
+    }
+};
 
+// const main = async () => {
+//     // await addContact(cont);
+//     const arr = await listAll();
+//     console.log(arr);
+    
+//     const contact = await findByName("abdullah");
+//     console.log(contact);
+
+//     const contact2 = await findById("61bbc0bd5ef3639ffe8e8b60");
+//     console.log(contact2);
+// }
+// main();
+
+module.exports = {listAll, findByName, findById, addContact};
 // 
