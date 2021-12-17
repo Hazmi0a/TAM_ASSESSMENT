@@ -67,8 +67,17 @@ const server = http.createServer(async (req, res) => {
     // /api/contacts/ : POST
     else if (req.url === "/api/contacts" && req.method === "POST") {
         // get the data sent along
-        let contact_data = await getReqData(req);
-        console.log(`Add new contact: ${contact_data}`);
+        let data = await getReqData(req);
+        console.log(`Add new contact: ${data}`);
+        const contact_data = JSON.parse(data);
+        if (contact_data.name.trim.length == 0) {
+            res.writeHead(400, "empty name");
+            res.end();
+        }
+        if (contact_data.phoneNumbers.length == 0) {
+            res.writeHead(400, "empty phone");
+            res.end();
+        }
         // create the contact
         try {
             const newContactId = await new Contact().createContact(JSON.parse(contact_data));
@@ -80,6 +89,7 @@ const server = http.createServer(async (req, res) => {
         } catch (err) {
             console.error(err);
             res.writeHead(500);
+            res.end();
         }
         
         
