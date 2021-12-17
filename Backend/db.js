@@ -13,8 +13,9 @@ const cont = { name: "abdullah", phoneNumbers: ["0506065978"]}
     try {
          await client.connect();
          
-         await dbo.insertOne(contact);
+         const result = await dbo.insertOne(contact);
          console.log("Contact Added.. ");
+         return result.insertedId.toString()
     } catch (error) {
         console.log(error);
     } finally {
