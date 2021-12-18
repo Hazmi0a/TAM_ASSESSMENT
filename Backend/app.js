@@ -6,14 +6,25 @@ const { getReqData } = require("./utils");
 const server = http.createServer(async (req, res) => {
   //set the request headers:
   res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
-  var headers = {
-    "Access-Control-Allow-Origin": req.headers.origin,
-    "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Credentials": false,
-    "Access-Control-Allow-Headers":
-      "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept",
-    "Access-Control-Max-Age": "86400",
-  };
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "POST, GET, PUT, DELETE, OPTIONS",
+    "POST, GET, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", false);
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Max-Age", "86400");
+  // var headers = {
+  //   "Access-Control-Allow-Origin": req.headers.origin,
+  //   "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE, OPTIONS",
+  //   "Access-Control-Allow-Credentials": false,
+  //   "Access-Control-Allow-Headers":
+  //     "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept",
+  //   "Access-Control-Max-Age": "86400",
+  // };
 
   //set the request route
   // /api/contacts : GET
@@ -99,7 +110,7 @@ const server = http.createServer(async (req, res) => {
   // OPTIONS
   else if (req.method === "OPTIONS") {
     console.log("!OPTIONS");
-    res.writeHead(204, headers);
+    res.writeHead(204);
     res.end();
   }
   // If no route present
