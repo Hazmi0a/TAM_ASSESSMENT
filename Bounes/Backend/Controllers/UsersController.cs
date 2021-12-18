@@ -14,7 +14,6 @@ using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Backend.Controllers
 {
@@ -65,7 +64,7 @@ namespace Backend.Controllers
             // }
             try
             {
-                User user = new() { UserName = register.Email, Email = register.Email, PhoneNumber = register.PhoneNumber };
+                User user = new() { UserName = register.Email, Email = register.Email };
 
                 var result = await _userManager.CreateAsync(user, register.Password);
 
@@ -79,9 +78,9 @@ namespace Backend.Controllers
 
                 ConfirmEmailDto dto = new() {Email=register.Email, Token=verificationToken} ;
                 var confirmUrl = Url.Action("confirmEmail","users", dto, Request.Scheme);
-                await _emailService.SendVerificationEmailTemplate(register.Email, confirmUrl);
+                // await _emailService.SendVerificationEmailTemplate(register.Email, confirmUrl);
 
-                return Ok(new { Email = register.Email, PhoneNumber = register.PhoneNumber });
+                return Ok(new { Email = register.Email });
 
             }
             catch (Exception ex)
@@ -148,7 +147,7 @@ namespace Backend.Controllers
                 ConfirmEmailDto dto = new() {Email=reconfirmEmailDto.Email, Token=newToken};
 
                 var confirmUrl = Url.Action("confirmEmail","users", dto, Request.Scheme);
-                await _emailService.SendVerificationEmailTemplate(reconfirmEmailDto.Email, confirmUrl);
+                // await _emailService.SendVerificationEmailTemplate(reconfirmEmailDto.Email, confirmUrl);
                  try
                  {
                      _logger.LogInformation("Email: {0} is Now Confirmed", user.Email);
@@ -184,28 +183,9 @@ namespace Backend.Controllers
 
                 if (result.Succeeded)
                 {
-                    var isCommittee = await _userManager.IsInRoleAsync(user, "Committee");
-
-                    if (isCommittee)
-                    {
-                        if(user.ChangePassword)
-                        {
-                            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                            _logger.LogInformation("User Committee with email: {0} has to change thier password ", user.Email);
-                            return Ok(new { Email = user.Email, ResetToken = resetToken, Committee = isCommittee, ChangePassword = user.ChangePassword });
-                        } else
-                        {
-                            var token = await _authRepo.GenerateToken(user);
-                            _logger.LogInformation("User Admin with email: {0} is logged in ", user.Email);
-                            return Ok(new { Email = user.Email, Token = token, Committee = isCommittee, ChangePassword = user.ChangePassword });
-                        }
-                    }
-                    else
-                    {
-                        var token = await _authRepo.GenerateToken(user);
-                        _logger.LogInformation("User with email: {0} is logged in ", user.Email);
-                        return Ok(new { Email = user.Email, PhoneNumber = user.PhoneNumber, Token = token });
-                    }
+                    var token = await _authRepo.GenerateToken(user);
+                    _logger.LogInformation("User with email: {0} is logged in ", user.Email);
+                    return Ok(new { User = user, authToken = token });
                 }
                 else
                 {
@@ -237,7 +217,7 @@ namespace Backend.Controllers
                  string urlString = _config["baseUrl"]+ $"newPassword?email={dto.Email}&token={dto.Token}" ;
 
                 Uri url = new(urlString);
-                await _emailService.SendRestPasswordEmailTemplate(forgotPasswordDto.Email , url.ToString());
+                // await _emailService.SendRestPasswordEmailTemplate(forgotPasswordDto.Email , url.ToString());
 
                 return Ok();
              }
@@ -294,9 +274,11 @@ namespace Backend.Controllers
             [Required]
             public string Email { get; set; }
             [Required]
-            public string Password { get; set; }
+            public string FirstName { get; set; }    
             [Required]
-            public string PhoneNumber { get; set; }
+            public string LastName { get; set; }
+            [Required]
+            public string Password { get; set; }
 
         }
 

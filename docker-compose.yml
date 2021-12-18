@@ -24,3 +24,11 @@ services:
     command: node app.js
     ports:
       - "3030:3030"
+  postgres:
+    image: "postgres" # use latest official postgres version
+    environment:
+      POSTGRES_PASSWORD: "Password2021#"
+      POSTGRES_USER: "sa"
+      POSTGRES_DB: "dbo"
+    ports:
+      - 5432:5432

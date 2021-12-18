@@ -24,13 +24,6 @@
       "applicationUrl": "http://localhost:6000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "Kestrel": {
-        "Endpoints": {
-          "Http": {
-            "Url": "http://0.0.0.0:6000"
-          }
-        }
       }
     }
   }

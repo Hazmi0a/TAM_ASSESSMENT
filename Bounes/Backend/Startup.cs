@@ -8,6 +8,7 @@ using Backend.Data;
 using Backend.Dtos;
 using Backend.Interfaces;
 using Backend.Models;
+using Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,7 +43,15 @@ namespace Backend
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DbPost"))
             );
-            // services.AddDbContext<CmdContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+             services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins("http://localhost:3000", "http://localhost:44349")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+                    //.AllowCredentials());
+            });
+
             services.AddControllers().AddNewtonsoftJson(s =>
             {
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -59,7 +68,7 @@ namespace Backend
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthRepo, AuthRepo>();
-            // services.AddScoped<ISendService, EmailService>();
+            services.AddScoped<ISendService, EmailService>();
 
             var key = Configuration["tokenKey"];
             services.AddAuthentication(conf =>
@@ -89,7 +98,6 @@ namespace Backend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend", Version = "v1" });
             });
-            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,11 +105,6 @@ namespace Backend
         {
             // migrate any database changes on startup (includes initial db creation)
             appContext.Database.Migrate();
-            app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:3000")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    );
             
             if (env.IsDevelopment())
             {
@@ -117,10 +120,11 @@ namespace Backend
            
 
 
-            //app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
 
             app.UseRouting();
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 
