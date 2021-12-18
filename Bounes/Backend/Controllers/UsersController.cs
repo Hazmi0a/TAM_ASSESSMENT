@@ -64,7 +64,7 @@ namespace Backend.Controllers
             // }
             try
             {
-                User user = new() { UserName = register.Email, Email = register.Email };
+                User user = new() { UserName = register.Email, Email = register.Email, FirstName = register.FirstName, LastName = register.LastName};
 
                 var result = await _userManager.CreateAsync(user, register.Password);
 

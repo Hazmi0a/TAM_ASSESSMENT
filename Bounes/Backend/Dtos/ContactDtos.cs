@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Backend.Base;
@@ -32,6 +33,6 @@ namespace Backend.Dtos
         [Required]
         public List<string> PhoneNumbers { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 }
