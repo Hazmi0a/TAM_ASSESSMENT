@@ -110,10 +110,17 @@ namespace Backend.Controllers
                 await _uow.Repo<PhoneNumber>().SaveChangesAsync(); 
                 // need to send new URI with response, so map user to TReadDto response 
                 // then pass the id of it to nameof GetGroupById and pass it to response as well
-                var ReadDto = _mapper.Map<ContactReadDto>(result.Model);
+                List<string> phonenumbers = new();
+                foreach (var number in result.Model.PhoneNumbers)
+                {
+                    phonenumbers.Add(number.Number);
+                }
+                
+                var readDto = _mapper.Map<ContactReadDto>(result.Model);
+                readDto.PhoneNumbers = phonenumbers;
                 // the route for the resource using the get by id action
                 var route = this.ControllerContext.ActionDescriptor.ControllerName + "/GetById";
-                return CreatedAtRoute(route, new { ReadDto.Id }, ReadDto);
+                return CreatedAtRoute(route, new { readDto.Id }, readDto);
             }
             catch (Exception ex)
             {
