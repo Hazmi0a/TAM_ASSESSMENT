@@ -12,6 +12,9 @@ in this project i have used my experince in the below stacks plus ive reused com
 
 if you'd like to view the whole process of creating those please find the project link below. in this project also you will find full CI/CD pipline setup to be deployed to Microsoft Azure.
 
+P.S.
+update is not working currently due to time constraint..
+
 Project link: https://dev.azure.com/alhazmiabdullah/Cmds
 Frontend : React with Redux using Typescript
 Backend: .NET, with authorization and authenication.
