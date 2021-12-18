@@ -22,7 +22,7 @@ namespace Backend.Dtos
         public string FirstName { get; set; }
         public string Lastname { get; set; }
 
-        public List<string> PhoneNumbers { get; set; }
+        public List<string> PhoneNumbers { get; set; } = new();
     }
     public class ContactCreateDto 
     {

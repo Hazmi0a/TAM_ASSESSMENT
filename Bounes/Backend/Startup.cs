@@ -104,13 +104,12 @@ namespace Backend
         {
             // migrate any database changes on startup (includes initial db creation)
             appContext.Database.Migrate();
-            
+              app.UseDeveloperExceptionPage();
+                            app.UseSwagger();
+                            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend v1"));
             if (env.IsDevelopment())
             {
-
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend v1"));
+              
             }
             else
             {
@@ -120,10 +119,10 @@ namespace Backend
 
 
             // app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseSerilogRequestLogging();
 
             app.UseRouting();
-            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

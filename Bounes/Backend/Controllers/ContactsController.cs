@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Backend.Dtos;
 using Backend.Interfaces;
 using Backend.Models;
 using Backend.Utils;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -28,15 +30,32 @@ namespace Backend.Controllers
 
         // GET api/Model All Model
         // [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ContactReadDto>>> GetAll()
+        [HttpGet("userId/{userId}")]
+        public async Task<ActionResult<IEnumerable<ContactReadDto>>> GetAllForUser(string userId)
         {
             _logger.LogInformation(LogEvents.ListResourses, Strings.ListingResources);
-            var opItems = await _uow.Repo<Contact>().GetAllAsync();
-            // if (opItems.Count == 0) _logger.LogInformation(LogEvents.ListResourses, Strings.NoResouces);
+            var result = await _uow.Repo<Contact>().FindAsync(c => c.UserId == userId);
+            if (!result.Success)
+            {
+                
+            }
+            if (result.Models.Count() == 0) _logger.LogInformation(LogEvents.ListResourses, Strings.NoResouces);
+            List<ContactReadDto> readDtos = new();
+            foreach (var contact in result.Models)
+            {
+                var contModel = _mapper.Map<ContactReadDto>(contact);
+                var phoneResults = await _uow.Repo<PhoneNumber>().FindAsync(p => p.ContactId == contact.Id);
+                List<string> phoneNumbers = new();
+                foreach (var number in phoneResults.Models)
+                {
+                    contModel.PhoneNumbers.Add(number.Number);
+                }
+                readDtos.Add(contModel);
+                
+            }
             // make the repo get all usertypes to map it with Model 
             //Return a Maped the op to opDTO 
-            return Ok(_mapper.Map<IEnumerable<ContactReadDto>>(opItems));
+            return Ok(readDtos);
         }
         
         // GET api/Model/{id} One use with id
@@ -101,9 +120,53 @@ namespace Backend.Controllers
                 _logger.LogError("Error happend", ex.Message);
                 return BadRequest(ex.Message);
             }
-            
+        }
+        [HttpPatch("{id}")]
+        public virtual async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<ContactCreateDto> patchDoc)
+        {
+            _logger.LogInformation(LogEvents.UpdateResourse, Strings.UpdateResourse(id), id);
+            var opModel = await _uow.Repo<Contact>().GetByIdAsync(id);
+            if (opModel == null)
+            {
+                _logger.LogWarning(LogEvents.GetResourseNotFound, Strings.GettingResource(id, false), id);
+                return NotFound();
+            }
 
-           
+            // mapp TModel to user dto then try to apple the patch doc to it.
+            var opToPatch = _mapper.Map<ContactCreateDto>(opModel);
+            patchDoc.ApplyTo(opToPatch, ModelState);
+            if (!TryValidateModel(opModel))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            // Map patched user to user which will update Db then save
+            _mapper.Map(opToPatch, opModel);
+            var result = await _uow.Repo<Contact>().UpdateAsync(opModel.Model);
+            if (!result.Success) return BadRequest(result.Message);
+            await _uow.Repo<Contact>().SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE api/s/{id}
+        //[Authorize]
+        [HttpDelete("{id}")]
+        public virtual async Task<ActionResult> Delete(int id)
+        {
+            _logger.LogInformation(LogEvents.DeleteResourse, Strings.DeleteResourse(id), id);
+            var result = await _uow.Repo<Contact>().GetByIdAsync(id);
+            if (!result.Success)
+            {
+                _logger.LogWarning(LogEvents.GetResourseNotFound, Strings.GettingResource(id, false), id);
+                return NotFound();
+            }
+
+            var resultDelete = await _uow.Repo<Contact>().DeleteAsync(result.Model);
+            if (!resultDelete.Success) return BadRequest(resultDelete.Message);
+            await _uow.Repo<Contact>().SaveChangesAsync();
+
+            return NoContent();
         }
     }
 

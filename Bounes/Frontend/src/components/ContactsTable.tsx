@@ -14,7 +14,7 @@ import { ViewIcon } from '@chakra-ui/icons';
 // import { Contact } from "../types";
 interface Contact {
     id: number;
-    firstname: string;
+    firstName: string;
     lastname: string;
     phoneNumbers: Array<string>;
   }
@@ -41,8 +41,9 @@ type IProps = {
       return arr[0];
     }
     }
+
 const ContactsTable = ({contacts, handleView}: IProps) => {
-    if(contacts) console.log(contacts);
+    // if(contacts) console.log(contacts);
     
     return (
         <Table variant='simple'>
@@ -56,10 +57,9 @@ const ContactsTable = ({contacts, handleView}: IProps) => {
                 </Tr>
             </Thead>
             <Tbody>
-                {contacts.map(contact => {
-                    console.log(contact);
+                {contacts.map(contact => (
                 <Tr key={contact.id}>
-                    <Td>{contact.firstname}</Td>
+                    <Td>{contact.firstName}</Td>
                     <Td>{contact.lastname}</Td>
                     <Td>{printPhoneNumbers(contact.phoneNumbers)}</Td>
                     <Td><IconButton
@@ -70,10 +70,10 @@ const ContactsTable = ({contacts, handleView}: IProps) => {
                         />
                     </Td>
                 </Tr>
-                })
+                ))
                 }
-                <Tr>
-                    <Td>{contacts[0].firstname}</Td>
+                {/* <Tr>
+                    <Td>{contacts[0].firstName}</Td>
                     <Td>{contacts[0].lastname}</Td>
                     <Td>{contacts[0].phoneNumbers[0]}</Td>
                     <Td><IconButton
@@ -83,7 +83,7 @@ const ContactsTable = ({contacts, handleView}: IProps) => {
                         icon={<ViewIcon />}
                         />
                     </Td>
-                </Tr>
+                </Tr> */}
             </Tbody>
             </Table>
     )

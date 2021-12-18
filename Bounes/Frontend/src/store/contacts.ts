@@ -93,7 +93,7 @@ import {
     const userid = getState().User.user.id;
     dispatch(
       apiCallBegan({
-        url: url + "user/" + userid,
+        url: url + "userid/" + userid,
         method: "get",
         token,
         onStart: contactRequest.type,

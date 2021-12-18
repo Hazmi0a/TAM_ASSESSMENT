@@ -55,9 +55,8 @@ const Home = () => {
         <AddModel isOpen={isOpen} onClose={onClose} contact={chosenContact}/>
       </Stack>
       <Divider />
-      <ContactsTable contacts={contactsData} handleView={handleView}/>
       {selectContacts && selectContacts.length > 0 ? (
-        <ContactsTable contacts={contactsData} handleView={handleView}/>
+        <ContactsTable contacts={selectContacts} handleView={handleView}/>
       ) : (
         <Box mt="40">
           {loaddingContacts ? (

@@ -75,7 +75,7 @@ const Account = () => {
   const { user } = useSelector((state: RootState) => state.User);
 
   const userInitials = () => {
-    return user.firstname.slice(0, 1) + user.lastname.slice(0, 1);
+    return user.firstName.slice(0, 1) + user.lastName.slice(0, 1);
   };
   const handleLogout = () => {
     removeItem("user");
@@ -95,7 +95,7 @@ const Account = () => {
       </MenuButton>
       <MenuList minWidth="240px">
         <MenuGroup title="Account">
-          <MenuItem>{user.firstname + " " + user.lastname}</MenuItem>
+          <MenuItem>{user.firstName + " " + user.lastName}</MenuItem>
           <MenuItem>{user.email}</MenuItem>
           <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
         </MenuGroup>

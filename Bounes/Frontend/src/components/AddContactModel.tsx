@@ -15,21 +15,17 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik, FormikHelpers, FormikValues } from "formik";
 import * as yup from "yup";
-import {
-  createContact,
-  deleteContact,
-  updateContact,
-} from "../store/contacts";
+import { createContact, deleteContact, updateContact } from "../store/contacts";
 import { useDispatch, useSelector } from "react-redux";
-import { Contact, CreateContact,  RootState } from "../types";
+import { Contact, CreateContact, RootState } from "../types";
 import { compareValues, patchObj } from "../utils";
 import MessageBox from "./MessageBox";
 type Props = { isOpen: boolean; onClose: () => void; contact?: Contact };
 const AddModel = ({ isOpen, onClose, contact }: Props) => {
   const initialFormValues = {
-    firstname: contact?.firstname ?? "",
+    firstName: contact?.firstName ?? "",
     lastname: contact?.lastname ?? "",
-    phoneNumbers: contact?.phoneNumbers ?? []
+    phoneNumbers: contact?.phoneNumbers ?? [],
   };
   const addNew = () => {
     return contact === undefined ? true : false;
@@ -40,14 +36,19 @@ const AddModel = ({ isOpen, onClose, contact }: Props) => {
   const dispatch = useDispatch();
   const handleSubmit = (values: FormikValues, actions: FormikHelpers<any>) => {
     console.log(values);
+
     if (addNew()) {
-      values = { ...values, userid: user.id };
+      values = {
+        userid: user.id,
+        firstName: values.firstName,
+        lastname: values.lastname,
+        phoneNumbers: [values.phoneNumbers],
+      };
       dispatch(createContact(values as CreateContact));
     } else {
       const updatedValues = compareValues(initialFormValues, values);
       const patchData = patchObj(updatedValues);
-      // if (patchData.length > 0)
-      //   dispatch(updateContact(contact!.id, patchData));
+      if (patchData.length > 0) dispatch(updateContact(contact!.id, patchData));
     }
 
     // Set the form isSubmiting value to false
@@ -87,18 +88,20 @@ const AddModel = ({ isOpen, onClose, contact }: Props) => {
                 <Form>
                   <FormControl
                     isRequired
-                    isInvalid={(errors.firstname && touched.firstname) as boolean}
+                    isInvalid={
+                      (errors.firstName && touched.firstName) as boolean
+                    }
                   >
                     <FormLabel>First Name</FormLabel>
                     <Input
                       ref={initialRef}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      name="firstname"
-                      value={values.firstname}
+                      name="firstName"
+                      value={values.firstName}
                       placeholder="First Name"
                     />
-                    <FormErrorMessage>{errors.firstname}</FormErrorMessage>
+                    <FormErrorMessage>{errors.firstName}</FormErrorMessage>
                   </FormControl>
                   <FormControl
                     isRequired
@@ -116,7 +119,9 @@ const AddModel = ({ isOpen, onClose, contact }: Props) => {
                   </FormControl>
                   <FormControl
                     isRequired
-                    isInvalid={(errors.phoneNumbers && touched.phoneNumbers) as boolean}
+                    isInvalid={
+                      (errors.phoneNumbers && touched.phoneNumbers) as boolean
+                    }
                   >
                     <FormLabel>Phone Number</FormLabel>
                     <Input
@@ -166,9 +171,9 @@ const AddModel = ({ isOpen, onClose, contact }: Props) => {
   );
 };
 const basicFormSchema = yup.object().shape({
-  firstname: yup.string().required("First name is required"),
+  firstName: yup.string().required("First name is required"),
   lastname: yup.string().required("Last name is required"),
-  phonenumber: yup.string().required("Phone number is required"),
+  phoneNumbers: yup.string().required("Phone number is required"),
 });
 
 export default AddModel;

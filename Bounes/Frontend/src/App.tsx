@@ -113,7 +113,7 @@ const App: React.FC<SomeComponentProps> = ({ history, location }) => {
         <Header />
       )}
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={AuthGurad(Home)} />
         <Route path="/session/signup" component={Signup} />
         <Route path="/session/signin" component={Signin} />
       </Switch>

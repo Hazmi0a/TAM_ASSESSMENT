@@ -3,7 +3,7 @@ import { Login, Registration, User } from "../types";
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { apiCallBegan } from "./api";
 import history from "../history";
-import { homeRoute } from "../Routes";
+import { signinRoute, homeRoute } from "../Routes";
 import { setItem, getItem } from "../localService";
 
 const initialState = {
@@ -92,7 +92,7 @@ export const registerUser = (data: Registration) => (
       onStart: userRequest.type,
       onSuccess: userCreateSucess.type,
       onError: userFail.type,
-      onRedirect: homeRoute,
+      onRedirect: signinRoute,
     })
   );
 };

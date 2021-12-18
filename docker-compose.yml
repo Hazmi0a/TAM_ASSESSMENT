@@ -32,3 +32,16 @@ services:
       POSTGRES_DB: "dbo"
     ports:
       - 5432:5432
+  dotnet-api:
+    build:
+      context: Bounes/Backend
+      dockerfile: Dockerfile
+    ports:
+      - 5001:80
+    depends_on:
+      - postgres
+  reactapp:
+    build:
+      context: ./Bounes/Frontend
+    ports:
+      - "3000:3000"
